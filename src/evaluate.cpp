@@ -546,7 +546,7 @@ namespace {
     }
 
     if (pos.check_counting())
-        kingDanger += kingDanger * 7 / (3 + pos.checks_remaining(Them));
+        kingDanger += (kingDanger + 500 * std::max(3 - pos.checks_remaining(Them), 0)) * 10 / (3 + pos.checks_remaining(Them));
 
     Square s = file_of(ksq) == FILE_A ? ksq + EAST : file_of(ksq) == pos.max_file() ? ksq + WEST : ksq;
     Bitboard kingFlank = pos.max_file() == FILE_H ? KingFlank[file_of(ksq)] : file_bb(s) | adjacent_files_bb(s);
@@ -937,14 +937,6 @@ namespace {
                 onHold2 |= attacks;
             }
         }
-    }
-
-    // nCheck
-    if (pos.check_counting())
-    {
-        int remainingChecks = pos.checks_remaining(Us);
-        assert(remainingChecks > 0);
-        score += make_score(3600, 1000) / (remainingChecks * remainingChecks);
     }
 
     // Extinction
