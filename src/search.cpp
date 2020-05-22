@@ -1563,6 +1563,7 @@ moves_loop: // When in check, search starts from here
           && !givesCheck
           && !(   pos.extinction_value() == -VALUE_MATE
                && pos.extinction_piece_types().find(ALL_PIECES) == pos.extinction_piece_types().end())
+          && !pos.must_capture()
           &&  futilityBase > -VALUE_KNOWN_WIN
           && !pos.advanced_pawn_push(move))
       {
