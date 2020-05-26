@@ -443,6 +443,9 @@ namespace {
         }
         Bitboard theirHalf = pos.board_bb() & ~forward_ranks_bb(Them, relative_rank(Them, Rank((pos.max_rank() - 1) / 2), pos.max_rank()));
         mobility[Us] += DropMobility * popcount(b & theirHalf & ~attackedBy[Them][ALL_PIECES]);
+        // Reduce score if there is a deficit of gates
+        if (pos.seirawan_gating() && !pos.piece_drops() && pos.count_in_hand(Us, ALL_PIECES) > popcount(pos.gates(Us)))
+            score -= PSQT::psq[make_piece(WHITE, pt)][SQ_NONE] / pos.count_in_hand(Us, ALL_PIECES) * (pos.count_in_hand(Us, ALL_PIECES) - popcount(pos.gates(Us)));
     }
 
     return score;
