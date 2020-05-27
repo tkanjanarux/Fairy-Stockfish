@@ -1698,6 +1698,11 @@ bool Position::see_ge(Move m, Value threshold) const {
               && count<ALL_PIECES>(~sideToMove) == extinction_piece_count() + 1)))
       return extinction_value() < VALUE_ZERO;
 
+  // Captured gate
+  Color Them = ~color_of(moved_piece(m));
+  if (seirawan_gating() && (gates(Them) & to) && count_in_hand(Them, ALL_PIECES) >= popcount(gates(Them)))
+      return true;
+
   int swap = PieceValue[MG][piece_on(to)] - threshold;
   if (swap < 0)
       return false;
